@@ -57,9 +57,14 @@ export default function ContactPage() {
   useEffect(() => {
     const loadContact = async () => {
       try {
-        const snap = await getDoc(
-          doc(db, "websites", "clinidixcom", "pages", "contact")
+        let snap = await getDoc(
+          doc(db, "websites", "oleturcom", "pages", "contact")
         );
+        if (!snap.exists()) {
+          snap = await getDoc(
+            doc(db, "websites", "oleturcom", "pages", "contact")
+          );
+        }
         if (snap.exists()) {
           setContactInfo(snap.data().contactInfo || []);
         }
@@ -77,9 +82,14 @@ export default function ContactPage() {
     const loadDistrict = async () => {
       if (!currentDistrict) return;
       try {
-        const snap = await getDoc(
-          doc(db, "websites", "clinidixcom", "districts", currentDistrict)
+        let snap = await getDoc(
+          doc(db, "websites", "oleturcom", "districts", currentDistrict)
         );
+        if (!snap.exists()) {
+          snap = await getDoc(
+            doc(db, "websites", "oleturcom", "districts", currentDistrict)
+          );
+        }
         if (snap.exists()) {
           setDistrictData(snap.data());
         }
@@ -99,10 +109,10 @@ export default function ContactPage() {
       l.includes("tel") ||
       l.includes("contact")
     ) {
-      return <Phone size={26} />;
+      return <Phone size={24} />;
     }
     if (l.includes("email") || l.includes("mail")) {
-      return <Mail size={26} />;
+      return <Mail size={24} />;
     }
     if (
       l.includes("address") ||
@@ -110,7 +120,7 @@ export default function ContactPage() {
       l.includes("location") ||
       l.includes("headquarter")
     ) {
-      return <MapPin size={26} />;
+      return <MapPin size={24} />;
     }
     if (
       l.includes("time") ||
@@ -118,13 +128,13 @@ export default function ContactPage() {
       l.includes("clock") ||
       l.includes("schedule")
     ) {
-      return <Clock3 size={26} />;
+      return <Clock3 size={24} />;
     }
-    return <Building size={26} />;
+    return <Building size={24} />;
   };
 
   return (
-    <div className="bg-[#FFF9EF]/40 text-[#38240D]">
+    <div className="bg-[#f8fafc] text-slate-900">
       {/* Banner */}
       <PageBanner
         badge="Get in Touch"
@@ -133,7 +143,7 @@ export default function ContactPage() {
       />
 
       {/* Main Grid */}
-      <section className="section-padding bg-gradient-to-b from-white via-[#FFF9EF] to-[#FDFBD4]">
+      <section className="section-padding bg-gradient-to-b from-white via-slate-50 to-sky-50/40">
         <div className="container-custom">
           <div className="grid lg:grid-cols-12 gap-12 items-start">
             {/* Left Contact Cards - 100% Dynamic from Firestore */}
@@ -150,15 +160,15 @@ export default function ContactPage() {
                     {[...Array(3)].map((_, i) => (
                       <div
                         key={i}
-                        className="h-28 rounded-3xl bg-[#F3E4D2]/60 animate-pulse"
+                        className="h-28 rounded-3xl bg-slate-100 animate-pulse"
                       />
                     ))}
                   </div>
                 ) : contactInfo.length === 0 ? (
-                  <div className="rounded-3xl border border-[#E8D3BC] bg-white p-8 text-center text-[#5B4634]">
-                    <Info size={32} className="mx-auto text-[#C05800] mb-2" />
-                    <p className="font-semibold">No Contact Information Added</p>
-                    <p className="text-xs mt-1">Please add contact details from the Admin panel.</p>
+                  <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center text-slate-600">
+                    <Info size={32} className="mx-auto text-[#0284c7] mb-2" />
+                    <p className="font-semibold text-slate-900">No Contact Information Added</p>
+                    <p className="text-xs mt-1 text-slate-500">Please add contact details from the Admin panel.</p>
                   </div>
                 ) : (
                   contactInfo.map((item, idx) => {
@@ -200,13 +210,13 @@ export default function ContactPage() {
                     return (
                       <div
                         key={idx}
-                        className="flex items-start gap-4 rounded-3xl border border-[#E8D3BC] bg-white p-6 shadow-sm transition-all hover:border-[#C05800]/40 hover:shadow-md"
+                        className="flex items-start gap-4 rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:border-sky-300 hover:shadow-md"
                       >
-                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F3E4D2] text-[#C05800] shrink-0">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-50 text-[#0284c7] shrink-0 border border-sky-100">
                           {getFieldIcon(label)}
                         </div>
                         <div className="flex-1">
-                          <h4 className="text-xs font-bold uppercase tracking-wider text-[#5B4634]">
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
                             {label}
                           </h4>
                           <div className="mt-2 flex flex-col gap-1.5">
@@ -216,7 +226,7 @@ export default function ContactPage() {
                                   <a
                                     key={vIdx}
                                     href={`tel:${String(val).replace(/\s+/g, "")}`}
-                                    className="text-base sm:text-lg font-bold text-[#38240D] hover:text-[#C05800] transition-colors inline-block"
+                                    className="text-base sm:text-lg font-bold text-slate-900 hover:text-[#0284c7] transition-colors inline-block"
                                   >
                                     {val}
                                   </a>
@@ -227,7 +237,7 @@ export default function ContactPage() {
                                   <a
                                     key={vIdx}
                                     href={`mailto:${val}`}
-                                    className="text-base font-bold text-[#38240D] hover:text-[#C05800] transition-colors inline-block break-all"
+                                    className="text-base font-bold text-slate-900 hover:text-[#0284c7] transition-colors inline-block break-all"
                                   >
                                     {val}
                                   </a>
@@ -236,7 +246,7 @@ export default function ContactPage() {
                               return (
                                 <p
                                   key={vIdx}
-                                  className="text-sm sm:text-base font-bold text-[#38240D] leading-relaxed"
+                                  className="text-sm sm:text-base font-bold text-slate-900 leading-relaxed"
                                 >
                                   {val}
                                 </p>
@@ -263,7 +273,7 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="section-padding bg-white border-t border-[#E8D3BC]/60">
+      <section className="section-padding bg-white border-t border-slate-200/80">
         <div className="container-custom max-w-4xl">
           <SectionTitle
             badge="Frequently Asked Questions"
@@ -278,23 +288,22 @@ export default function ContactPage() {
               return (
                 <div
                   key={idx}
-                  className="rounded-3xl border border-[#E8D3BC] bg-[#FFF9EF]/60 overflow-hidden transition-all"
+                  className="rounded-3xl border border-slate-200 bg-slate-50/60 overflow-hidden transition-all"
                 >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    className="w-full flex items-center justify-between p-6 text-left font-bold text-[#38240D] hover:text-[#C05800]"
+                    className="w-full flex items-center justify-between p-6 text-left font-bold text-slate-900 hover:text-[#0284c7]"
                   >
                     <span className="text-base sm:text-lg pr-4">{faq.q}</span>
                     <ChevronDown
                       size={20}
-                      className={`shrink-0 text-[#C05800] transition-transform duration-300 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
+                      className={`shrink-0 text-[#0284c7] transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+                        }`}
                     />
                   </button>
 
                   {isOpen && (
-                    <div className="px-6 pb-6 text-sm sm:text-base leading-relaxed text-[#5B4634] border-t border-[#E8D3BC]/40 pt-4">
+                    <div className="px-6 pb-6 text-sm sm:text-base leading-relaxed text-slate-600 border-t border-slate-200 pt-4 bg-white/50">
                       {faq.a}
                     </div>
                   )}

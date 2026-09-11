@@ -6,14 +6,14 @@ import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   metadataBase: new URL(
-    "https://clinidix.com"
+    "https://oletur.com"
   ),
 
   title:
-    "Skyline Diagnostics | Biomedical & Diagnostic Equipment",
+    "Raj Biosis | Biomedical & Diagnostic Equipment",
 
   description:
-    "Raj Biosis Private Limited (Raj Biomedical) supplies CBC Machines, Hematology Analyzers, Biochemistry Analyzers, ELISA Readers and laboratory equipment across India.",
+    "Raj Biosis Private Limited  supplies CBC Machines, Hematology Analyzers, Biochemistry Analyzers, ELISA Readers and laboratory equipment across India.",
 
   keywords: [
     "Biomedical Equipment Supplier",
@@ -24,17 +24,17 @@ export const metadata = {
     "Diagnostic Equipment Supplier",
     "Medical Equipment Supplier India",
     "Raj Biosis",
-    "Raj Biomedical",
+    "Raj Biosis",
   ],
 
   openGraph: {
     title:
-      "Skyline Diagnostics | Biomedical & Diagnostic Equipment",
+      "Raj Biosis | Biomedical & Diagnostic Equipment",
 
     description:
       "Open, spacious design language for fast product scanning and service discovery.",
 
-    url: "https://clinidix.com",
+    url: "https://oletur.com",
 
     siteName: "Raj Biosis Private Limited",
 
@@ -55,7 +55,7 @@ export const metadata = {
     card: "summary_large_image",
 
     title:
-      "Skyline Diagnostics | Biomedical & Diagnostic Equipment",
+      "Raj Biosis | Biomedical & Diagnostic Equipment",
 
     description:
       "Open, spacious design language for fast product scanning and service discovery.",
@@ -70,7 +70,7 @@ export const metadata = {
   },
 
   alternates: {
-    canonical: "https://clinidix.com",
+    canonical: "https://oletur.com",
   },
 };
 
@@ -79,7 +79,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased variant-13" data-ui-variant="sky" suppressHydrationWarning>
+      <body className="antialiased bg-[#f8fafc] text-slate-900" suppressHydrationWarning>
         <Navbar />
 
         <main>
