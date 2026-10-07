@@ -21,8 +21,8 @@ import {
     getDoc,
     addDoc,
     collection,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
+} from "@/lib/client-api";
+import { db } from "@/lib/client-api";
 
 const loadImageBase64 = async (src) => {
     try {
@@ -192,13 +192,25 @@ const getWebsiteDomain = () => {
     return "oletur.com";
 };
 
-export default function ProductDetails({ slug }) {
-    const [product, setProduct] = useState(null);
+export default function ProductDetails({
+    slug,
+    district,
+    initialProduct = null,
+    initialContactInfo = [],
+}) {
+    const [product, setProduct] = useState(initialProduct);
     const [imageLoaded, setImageLoaded] = useState(false);
-    const [selectedImage, setSelectedImage] = useState("");
+    const initialImg = initialProduct
+        ? (Array.isArray(initialProduct.images) && initialProduct.images[0]) ||
+          initialProduct.image ||
+          initialProduct.imgUrl ||
+          initialProduct.imageUrl ||
+          "/logo.png"
+        : "";
+    const [selectedImage, setSelectedImage] = useState(initialImg);
     const [selectedMedia, setSelectedMedia] = useState("image");
     const [showShare, setShowShare] = useState(false);
-    const [contactInfo, setContactInfo] = useState([]);
+    const [contactInfo, setContactInfo] = useState(initialContactInfo);
     const [downloadingBrochure, setDownloadingBrochure] = useState(false);
 
     const shareRef = useRef();
@@ -240,7 +252,6 @@ export default function ProductDetails({ slug }) {
         if (product.category) addSpec("Category", product.category);
         if (product.subCategory) addSpec("Sub Category", product.subCategory);
         if (product.categoryProductId) addSpec("Product ID", product.categoryProductId);
-        // if (product.price && String(product.price).trim()) addSpec("Price", `₹ ${product.price}`);
 
         // Parse parameters string if given in admin
         if (product.parameters && typeof product.parameters === "string") {
@@ -301,6 +312,8 @@ export default function ProductDetails({ slug }) {
         city.slice(1);
 
     useEffect(() => {
+        if (product) return;
+
         const loadProduct = async () => {
             try {
                 const allProducts = await fetchAllDynamicProducts();
@@ -341,7 +354,7 @@ export default function ProductDetails({ slug }) {
                     setSelectedMedia("image");
                 }
             } catch (error) {
-                console.error("Error loading product from Firestore, using fallback:", error);
+                console.error("Error loading product from MongoDB, using fallback:", error);
                 let found = fallbackProducts.find(
                     (p) => p.slug === slug || makeSlug(p.title) === slug || p.id === slug
                 );
@@ -370,9 +383,11 @@ export default function ProductDetails({ slug }) {
         };
 
         loadProduct();
-    }, [slug]);
+    }, [slug, product]);
 
     useEffect(() => {
+        if (contactInfo.length > 0) return;
+
         const loadContact = async () => {
             try {
                 const snap = await getDoc(
@@ -386,7 +401,7 @@ export default function ProductDetails({ slug }) {
             }
         };
         loadContact();
-    }, []);
+    }, [contactInfo.length]);
 
     const handleDownloadBrochure = async () => {
         if (!product) return;

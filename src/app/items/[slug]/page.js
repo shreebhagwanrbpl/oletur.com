@@ -1,15 +1,22 @@
 import ProductDetails from "./ProductDetails";
+import { fetchProductBySlug, fetchContactData } from "@/lib/data-fetcher-server";
+
+export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
 
-    const productName = slug
+    const product = await fetchProductBySlug(slug).catch(() => null);
+
+    const productName = product?.title || slug
         ?.replace(/-/g, " ")
         ?.replace(/\b\w/g, (c) => c.toUpperCase());
 
     const title = `${productName} Supplier in India | Price, Dealer & Distributor | Raj Biosis Private Limited`;
 
-    const description = `Buy ${productName} at best price in India. Trusted supplier, dealer and distributor of ${productName} for hospitals, laboratories, diagnostic centers, research institutes and healthcare facilities. Contact Raj Biosis Private Limited  for latest quotation and product details.`;
+    const description = product?.description
+        ? `${product.description.slice(0, 160)}... Buy ${productName} at best price in India.`
+        : `Buy ${productName} at best price in India. Trusted supplier, dealer and distributor of ${productName} for hospitals, laboratories, diagnostic centers, research institutes and healthcare facilities. Contact Raj Biosis Private Limited for latest quotation and product details.`;
 
     const url = `https://oletur.com/items/${slug}`;
 
@@ -54,12 +61,14 @@ export async function generateMetadata({ params }) {
             siteName: "Raj Biosis Private Limited",
             type: "website",
             locale: "en_IN",
+            images: product?.image ? [{ url: product.image }] : [{ url: "/logo.png" }],
         },
 
         twitter: {
             card: "summary_large_image",
             title,
             description,
+            images: product?.image ? [product.image] : ["/logo.png"],
         },
 
         robots: {
@@ -81,5 +90,16 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
     const { slug } = await params;
 
-    return <ProductDetails slug={slug} />;
+    const [product, contactData] = await Promise.all([
+        fetchProductBySlug(slug).catch(() => null),
+        fetchContactData().catch(() => null),
+    ]);
+
+    return (
+        <ProductDetails
+            slug={slug}
+            initialProduct={product}
+            initialContactInfo={contactData?.contactInfo || []}
+        />
+    );
 }

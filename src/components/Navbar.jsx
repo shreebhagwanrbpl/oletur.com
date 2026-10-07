@@ -55,6 +55,7 @@ export default function Navbar() {
             src="/logo.png"
             alt="Raj Biosis Private Limited"
             fill
+            sizes="(max-width: 768px) 192px, 192px"
             className="object-contain object-left"
             priority
           />

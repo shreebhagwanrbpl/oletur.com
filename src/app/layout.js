@@ -78,7 +78,7 @@ export default function RootLayout({
   children,
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="antialiased bg-[#f8fafc] text-slate-900" suppressHydrationWarning>
         <Navbar />
 

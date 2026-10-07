@@ -1,12 +1,22 @@
-import ContactPage from "@/app/contact/page";
+import ContactClient from "@/components/ContactClient";
+import { fetchContactData, fetchDistrictData } from "@/lib/data-fetcher-server";
+
+export const revalidate = 60;
 
 export default async function Page({ params }) {
-
   const { district = "jaipur" } = await params;
 
-  const city = district
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+  const [contactData, districtData] = await Promise.all([
+    fetchContactData().catch(() => null),
+    fetchDistrictData(district).catch(() => null),
+  ]);
 
-  return <ContactPage city={city} />;
+  const initialContactInfo = contactData?.contactInfo || [];
+
+  return (
+    <ContactClient
+      initialContactInfo={initialContactInfo}
+      initialDistrictData={districtData}
+    />
+  );
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { doc, getDoc } from "@/lib/client-api";
+import { db } from "@/lib/client-api";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -108,7 +108,7 @@ export default function Footer() {
     loadDistrict();
   }, [district]);
 
-  // Extract phone numbers flexibly from Firestore contactInfo
+  // Extract phone numbers flexibly from MongoDB contactInfo
   const phoneItems = contactInfo.filter((item) => {
     const l = (item?.label || "").toLowerCase();
     return (
@@ -159,16 +159,9 @@ export default function Footer() {
     ? `${districtData.district}, ${districtData.state}, India`
     : rawAddress;
 
-  // Fallback list of top categories if database has none yet
+  // Only dynamic categories extracted from products
   const displayCategories = useMemo(() => {
-    if (categories.length > 0) return categories.slice(0, 6);
-    return [
-      "Diagnostic Analyzers",
-      "Molecular Diagnostics",
-      "Hospital & ICU Gear",
-      "Laboratory Equipment",
-      "Reagents & Consumables",
-    ];
+    return categories.slice(0, 8);
   }, [categories]);
 
   if (loading) {
@@ -211,6 +204,7 @@ export default function Footer() {
                   src="/logo.png"
                   alt="Raj Biosis Private Limited"
                   fill
+                  sizes="(max-width: 768px) 208px, 208px"
                   className="object-contain object-left"
                 />
               </Link>
@@ -299,7 +293,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Contact Info - Purely Dynamic from Firestore */}
+          {/* Contact Info - Purely Dynamic from MongoDB */}
           <div>
             <h3 className="mb-5 text-lg font-bold text-slate-900">
               Contact Info

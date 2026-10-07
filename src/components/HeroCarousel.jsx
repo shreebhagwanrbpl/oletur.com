@@ -19,7 +19,7 @@ import {
 /* =========================================================
    STATIC IMAGE FALLBACK
    ---------------------------------------------------------
-   Images only fallback to these when Firebase has no
+   Images only fallback to these when Admin API has no
    usable media or an image fails to load.
 ========================================================= */
 
@@ -266,8 +266,8 @@ export default function HeroCarousel({
 
   /*
    * Images:
-   * Firebase → Dynamic
-   * No Firebase image → Static fallback
+   * Admin API → Dynamic
+   * No Admin API image → Static fallback
    */
   const slides =
     dbSlides.length > 0
@@ -456,7 +456,9 @@ export default function HeroCarousel({
                     ].url
                     : activeSlide.url
                 }
-                alt=""
+                alt={heroTitle || "Biomedical Equipment"}
+                fetchPriority={current === 0 ? "high" : "auto"}
+                decoding="async"
                 className="h-full w-full object-cover"
                 onError={(event) =>
                   handleImageError(
